@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1693605721 source:e:\unlam\algoritmos\pila\parcialhtml\main.c
+	<stdio.h>
+	<stdlib.h>
+	"../PilaDinamica/PilaDinamica.h"
+
+1693480278 e:\unlam\algoritmos\pila\piladinamica\piladinamica.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

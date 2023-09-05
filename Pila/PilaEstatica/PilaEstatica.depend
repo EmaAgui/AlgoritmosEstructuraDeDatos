@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1692894653 source:e:\unlam\algoritmos\pila\pilaestatica\pilaestatica.c
+	"PilaEstatica.h"
+
+1692894456 e:\unlam\algoritmos\pila\pilaestatica\pilaestatica.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
