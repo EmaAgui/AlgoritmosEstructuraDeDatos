@@ -1,0 +1,8 @@
+01|mart|1|10
+01|dest|2|20
+01|tornillos|50|5
+02|mart|1|10
+02|clavos|100|5
+02|taladro|1|95
+03|clavos|1|5
+03|mart|1|10

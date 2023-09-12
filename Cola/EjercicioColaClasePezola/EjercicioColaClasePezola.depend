@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1694235516 source:e:\unlam\algoritmos\cola\ejerciciocolaclasepezola\funciones.c
+	"Funciones.h"
+	<string.h>
+
+1694231262 e:\unlam\algoritmos\cola\ejerciciocolaclasepezola\funciones.h
+	<stdio.h>
+	"../ColaDinamica/ColaDinamica.h"
+
+1694231257 source:e:\unlam\algoritmos\cola\ejerciciocolaclasepezola\main.c
+	<stdio.h>
+	<stdlib.h>
+	"Funciones.h"
+
+1694227938 e:\unlam\algoritmos\cola\coladinamica\coladinamica.h
+	<stdio.h>
+	<stdlib.h>
+

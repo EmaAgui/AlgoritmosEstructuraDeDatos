@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1694228148 source:e:\unlam\algoritmos\cola\testcola\main.c
+	<stdio.h>
+	<stdlib.h>
+	"../ColaDinamica/ColaDinamica.h"
+
+1694227938 e:\unlam\algoritmos\cola\coladinamica\coladinamica.h
+	<stdio.h>
+	<stdlib.h>
+
