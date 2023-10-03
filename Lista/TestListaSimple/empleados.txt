@@ -1,0 +1,10 @@
+1|Maria Pia|10000.00|F
+2|Juan Perez|20000.00|M
+3|Ana Lopez|30000.00|F
+4|Pedro Gomez|40000.00|M
+5|Jose Martinez|50000.00|M
+6|Marta Sanchez|60000.00|F
+7|Carlos Gonzalez|70000.00|M
+8|Lucia Rodriguez|80000.00|F
+9|Alberto Fernandez|90000.00|M
+10|Florencia Fernandez|100000.00|F

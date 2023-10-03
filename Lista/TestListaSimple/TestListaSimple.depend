@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1696039134 source:e:\unlam\algoritmos\lista\testlistasimple\main.c
+	<stdio.h>
+	<stdlib.h>
+	"../ListaSimple/ListaSimple.h"
+
+1696039135 e:\unlam\algoritmos\lista\listasimple\listasimple.h
+	<stdio.h>
+
