@@ -202,8 +202,6 @@ void intercambiar(void * e1, void * e2, size_t tam)
 
 
 ///Archivos
-#include "Funciones.h"
-
 
 void mostrarEmp(const void *dato)
 {
@@ -451,13 +449,6 @@ int esPalindromo(const char *cad)
 }
 
 
-void mostrarInt(void* d)
-{
-    int *n = (int*)d;
-    printf("%d\n", *n);
-}
-
-
 void aMap(void *vec, unsigned ce, unsigned tam, void (*accion)(void* d))
 {
     if(ce == 0)
@@ -507,8 +498,6 @@ void *rBinaria(int li, int ls, size_t tam, const void *clave, const void *base, 
     return NULL;
 }
 
-
-
 void *busquedaBinaria(const void *clave, const void *base, size_t ce, size_t tam, int(*cmp)(const void *d1, const void *d2))
 {
     int li, ls;
@@ -516,185 +505,6 @@ void *busquedaBinaria(const void *clave, const void *base, size_t ce, size_t tam
     ls = ce - 1;
 
     return rBinaria(li, ls, tam, clave, base, cmp);
-}
-
-
-///Matrices
-
-int esCorrecta(int mat[][COL], int ce)
-{
-    int i, j;
-    void *indice;
-    int matPuntos[][6] =
-    {
-    ///  0  1  2  3  4  5
-        {0, 1, 2, 3, 4, 6},
-        {6, 4, 2, 3, 1, 0}
-    };
-
-
-    for(i = 0; i < ce; i++)
-    {
-        for(j = 0; j < ce; j++)
-        {
-            if(i == j)
-            {
-                if(mat[i][j] != 0)
-                    return TODO_MAL;
-            }
-            else
-            {
-                if((indice = bsearch(&mat[i][j], matPuntos[0], 6, sizeof(int), compararInt)) == NULL)
-                    return TODO_MAL;
-
-//               printf("\n%d", *((int*)(indice+6*(sizeof(int)))));
-
-                if(mat[j][i] != *((int*)(indice+6*(sizeof(int)))))
-                    return TODO_MAL;
-            }
-        }
-    }
-
-    return TODO_OK;
-}
-
-
-void recorrerMatrizEspiral(void *mat, int filas, int columnas, size_t tam, void accion(void *d))
-{
-    int iniFila, iniColumna, finFila, finColumna, f, c;
-
-    iniFila = 0;
-    finFila = filas - 1;
-    iniColumna = 0;
-    finColumna = columnas - 1;
-
-    while (iniFila <= finFila && iniColumna <= finColumna)
-    {
-        // Derecha a Izquierda
-        for (c = iniColumna; c <= finColumna; c++)
-            accion(mat + (iniFila * columnas + c) * tam);
-
-        // Arriba a Abajo
-        for (f = iniFila + 1; f <= finFila; f++)
-            accion(mat + (f * columnas + finColumna) * tam);
-
-        // Derecha a Izquierda
-        if (iniFila < finFila)
-        {
-            for(c = finColumna - 1; c >= iniColumna; c--)
-                accion(mat + (finFila * columnas + c) * tam);
-        }
-
-        // Abajo hacia Arriba
-        if (iniColumna < finColumna)
-        {
-            for (f = finFila - 1; f > iniFila; f--)
-                accion(mat + (f * columnas + iniColumna) * tam);
-        }
-
-        iniFila++;
-        finFila--;
-        iniColumna++;
-        finColumna--;
-    }
-}
-
-
-int _contarCelulasVivasEnVecindario(int mat[][MAX_COL], int filas, int columnas, int fila, int columna)
-{
-    int contador = 0;
-
-    // Verificar las celdas en el vecindario de la posici�n dada
-    for (int i = fila - 1; i <= fila + 1; i++)
-    {
-        for (int j = columna - 1; j <= columna + 1; j++)
-        {
-            // Verificar si la posici�n est� dentro de los l�mites de la matriz
-            if (i >= 0 && i < filas && j >= 0 && j < columnas)
-            {
-                // Verificar si la celda est� viva (valor 1)
-                if (mat[i][j] == 1)
-                    contador++;
-            }
-        }
-    }
-
-    // Restar 1 al contador si la posici�n dada tambi�n est� viva
-    if (mat[fila][columna] == 1)
-        contador--;
-
-    return contador;
-}
-
-void mostrar(int mat[][7])
-{
-    int i,j;
-    for(i=0;i<TAM;i++)
-    {
-        for(j=0;j<TAM;j++)
-        {
-            printf("%d ",mat[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void primer_cuadrante(int mat[][7])
-{
-    int i,j;
-    for(i=0;i<=TAM/2;i++)
-    {
-        for(int k=0;k<i;k++) printf("   ");
-
-        for(j=i;j<TAM-i;j++)
-        {
-            printf("%d ",mat[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void segundo_cuadrante(int mat[][7])
-{
-    int i,j;
-    for(i=0;i<TAM;i++)
-    {
-        for(j=0;(i<=TAM/2)?(j<=i):(j<TAM-i);j++)
-        {
-            printf("%d ",mat[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void tercer_cuadrante(int mat[][7])
-{
-    int i,j;
-    for(i=TAM/2-1;i<TAM;i++)
-    {
-        for(int k=0;k<TAM-i-1;k++) printf("   ");
-
-        for(j=TAM-i-1;j<=i;j++)
-        {
-            printf("%d ",mat[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void cuarto_cuadrante(int mat[][7])
-{
-    int i,j;
-    for(i=0;i<TAM;i++)
-    {
-        for(int k=0;k<((i<TAM/2)?(TAM-i-1):(i));k++) printf("   ");
-
-        for(j=(i<TAM/2)?(TAM-i-1):(i);j<TAM;j++)
-        {
-            printf("%d ",mat[i][j]);
-        }
-        printf("\n");
-    }
 }
 
 ///Cadenas
@@ -749,23 +559,6 @@ char* _mstrstr(const char *s1, const char *s2)
 }
 
 
-int contar_palabra(char *palabra, char *texto)
-{
-    int contador = 0;
-    int longitud_texto = strlen(texto);
-    int longitud_palabra = strlen(palabra);
-
-    if (longitud_palabra > longitud_texto)
-        return 0;
-
-    for (int i = 0; i <= longitud_texto - longitud_palabra; i++)
-    {
-        if (strncmp(texto + i, palabra, longitud_palabra) == 0)
-            contador++;
-    }
-
-    return contador;
-}
 ///Arbol
 int arbolBalanceado(const Arbol *pa)
 {
