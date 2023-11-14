@@ -1,119 +1,4 @@
 
-
-///Vectores
-
-void* buscar(const void *vec, size_t ce, size_t tam, void* elem,
-             int (*cmp)(const void*, const void*))
-{
-    while(ce)
-    {
-        if(cmp(vec, elem)==0)
-        {
-            return (void*) vec;
-        }
-        vec+=tam;
-        ce--;
-    }
-    return NULL;
-}
-
-
-void* amap(void *vec, size_t ce, size_t tam, void(*accion)(void*))
-{
-    void* ini=vec;
-    while(ce)
-    {
-        accion(vec);
-        ce--;
-        vec+=tam;
-    }
-    return ini;
-}
-
-
-void* reduce(void*vec, size_t ce, size_t tam, void* valor_retorno,
-             void (*freduccion)(void*vr, const void* e))
-{
-    while(ce)
-    {
-        freduccion(valor_retorno, vec);
-        ce--;
-        vec+=tam;
-    }
-    return valor_retorno;
-}
-
-
-void* filter(void*vec, size_t *ce, size_t tam,
-             int (*ffilter)(const void*))
-{
-    void *pl = vec, *pe = vec;
-    int ciclos = *ce;
-
-    while(ciclos--)
-    {
-        if(ffilter(pl))
-        {
-            if(pe!=pl)
-                memcpy(pe, pl, tam);
-            pe+=tam;
-        }else{
-            (*ce)--;
-        }
-        pl+=tam;
-    }
-    return vec;
-}
-
-
-void eliminarTodasAparicionesGenerica(void *vec, int *ce, const void *dato, size_t tam, int cmp(const void *d1, const void *d2))
-{
-    void *fin = vec + (((*ce)) * tam);
-    void *ini = vec;
-
-    while(ini < fin)
-    {
-        if((cmp(dato, ini) == 0))
-        {
-            memmove(ini, ini + tam, fin - ini + tam);
-            (*ce)--;
-        }
-        else
-            ini += tam;
-    }
-}
-
-
-void eliminarGenerica(void *vec, int *ce, const void *dato, size_t tam, int cmp(const void *d1, const void *d2))
-{
-    void *fin = vec + (((*ce)) * tam);
-    void *ini = vec;
-
-    while(ini < fin && cmp(dato, ini) != 0)
-        ini += tam;
-
-    if (ini != fin)
-    {
-        memmove(ini, ini + tam, fin - ini + tam);
-        (*ce)--;
-    }
-
-}
-
-
-void insertarOrdenado(void *vec, int ce, const void *dato, size_t tam, int cmp(const void *d1, const void *d2))
-{
-    void *fin = vec + ((ce) * tam);  // Calcula un puntero al final del vector
-    void *ini = vec;                     // Establece un puntero al inicio del vector
-
-    while (ini < fin && cmp(dato, ini) > 0)
-        ini += tam;                       // Avanza al siguiente elemento mientras el dato a insertar sea mayor que el elemento actual
-
-    memmove(ini + tam, ini, fin - ini + tam);  // Desplaza los elementos hacia adelante para hacer espacio para el nuevo elemento
-    memcpy(ini, dato, tam);               // Copia el dato a insertar en la posici�n correcta
-}
-
-
 void *busquedaBinaria(const void *clave, const void *base, size_t ce, size_t tam, int(*cmp)(const void *d1, const void *d2))
 {
     int li, ls, pm, comp;
@@ -202,39 +87,6 @@ void intercambiar(void * e1, void * e2, size_t tam)
 
 
 ///Archivos
-
-void mostrarEmp(const void *dato)
-{
-    const Empleado *emp = (const Empleado*)dato;
-
-    printf("Dni:[%d], Nombre: [%s], Apelido: [%s], sueldo: [%.2f]\n",
-           emp->dni, emp->nombre, emp->apellido, emp->sueldo);
-}
-
-void mostraBin(const char *nombreArch, size_t tam, void mostrar(const void *dato))
-{
-    void *dato = malloc(tam);
-    FILE *arch = fopen(nombreArch, "rb");
-
-    if(!dato || !arch)
-    {
-        fclose(arch);
-        free(dato);
-        return;
-    }
-
-    fread(dato, tam,1, arch);
-    while(!feof(arch))
-    {
-        mostrar(dato);
-        fread(dato, tam,1, arch);
-    }
-
-    fclose(arch);
-    free(dato);
-
-}
-
 void actualizar(const void* nombreTxt, const void* nombreBin)
 {
     FILE *archEst, *archEmp;
@@ -276,8 +128,6 @@ void actualizar(const void* nombreTxt, const void* nombreBin)
             i = fscanf(archEst,"%d|%[^|\n]|%[^|\n]|%f\n", &est.dni, est.apellido, est.nombre, &est.promedio);
         }
     }
-
-
     fclose(archEst);
     fclose(archEmp);
 }
@@ -326,18 +176,11 @@ int crearLoteEmp(const void* nombreBin)
         {789, "Perez", "Luis", 1800.0},
         {901, "Torres", "Diego", 3500.0},
     };
-
-
-
     archEmp = fopen(nombreBin, "wb");
-
     if(!archEmp)
         return -10;
-
     fwrite(vEmp, sizeof(Empleado), sizeof(vEmp) / sizeof(*vEmp), archEmp);
-
     fclose(archEmp);
-
     return 1;
 }
 
@@ -363,7 +206,6 @@ void trozarArchFijo(void *dato, char *cad)
     sscanf(cad, "%d", &(alu->dni));
 
 }
-
 void trozarEmpleado(char *cad, Empleado *emp)
 {
     char *aux = strchr(cad, '\n');
@@ -387,94 +229,6 @@ void trozarEmpleado(char *cad, Empleado *emp)
 
     sscanf(cad, "%d", &emp->dni);
 
-}
-
-
-///Recursivas
-char *rStrchr(const char *cad, int c)
-{
-    if(!*cad)
-        return NULL;
-
-    if(*cad == c)
-            return (char*)cad;
-
-    return rStrchr(cad + 1, c);
-}
-
-char *rStrrchr(const char *cad, int c)
-{
-    if (*cad == '\0')
-        return NULL;
-
-    char *result = rStrrchr(cad + 1, c);
-
-    if (result != NULL)
-        return result;
-
-    if (*cad == c)
-        return (char*)cad;
-
-    return NULL;
-}
-
-
-int rPalindromo(const char *ini, const char *fin)
-{
-    if (ini >= fin)
-        return 1;
-
-    if (!isalpha(*ini))
-        return rPalindromo(ini + 1, fin);
-
-    if (!isalpha(*fin))
-        return rPalindromo(ini, fin - 1);
-
-    if (toupper(*ini) != toupper(*fin))
-        return 0;
-
-    return rPalindromo(ini + 1, fin - 1);
-}
-
-
-int esPalindromo(const char *cad)
-{
-    const char *fin = cad;
-
-    while(*fin)
-        fin++;
-    fin--;
-
-    return rPalindromo(cad, fin);
-}
-
-
-void aMap(void *vec, unsigned ce, unsigned tam, void (*accion)(void* d))
-{
-    if(ce == 0)
-        return;
-
-    accion(vec);
-
-    aMap((char*)vec + tam, ce - 1, tam, accion);
-}
-
-
-size_t rStrlen(const char *cad)
-{
-    if(*cad == '\0')
-        return 0;
-
-    return 1 + rStrlen(++cad);
-}
-
-
-int factorial(int n)
-{
-    if(n == 0)
-        return 1;
-
-    return n * factorial(n - 1);
 }
 
 void *rBinaria(int li, int ls, size_t tam, const void *clave, const void *base, int(*cmp)(const void *d1, const void *d2))
@@ -507,55 +261,185 @@ void *busquedaBinaria(const void *clave, const void *base, size_t ce, size_t tam
     return rBinaria(li, ls, tam, clave, base, cmp);
 }
 
-///Cadenas
-int _cmp_str(const void* a, const void* b)
+///Arbol IDX
+
+
+#define MIN(X, Y)   ((X > Y) ? (Y) : (X))
+
+
+tArbolBinBusq* buscar_nodo_no_clave(const tArbolBinBusq* pa, void* pd,
+                                          int (*cmp)(const void *, const void *))
 {
-    const char *c1 = (const char *)a;
-    const char *c2 = (const char *)b;
+    const tArbolBinBusq* res;
 
-    while(*c1 && *c2)
+    if(!*pa)
+        return NULL;
+
+    if(cmp(pd, (*pa)->info) == 0)
+        return (tArbolBinBusq*)pa;
+
+    if((res = buscar_nodo_no_clave(&(*pa)->izq, pd, cmp)))
+       return (tArbolBinBusq*)res;
+
+    return buscar_nodo_no_clave(&(*pa)->der, pd, cmp);
+}
+
+int buscarElemNoClaveArbolBinBusq(const tArbolBinBusq *p, void *d, unsigned tam,
+                                 int (*cmp)(const void *, const void *))
+{
+    const tArbolBinBusq* elem;
+
+    if(!*p)
+        return SIN_INICIALIZAR;
+
+    elem = buscar_nodo_no_clave(p, d, cmp);
+
+    memcpy(d, (*elem)->info, MIN((*elem)->tamInfo, tam));
+
+    return TODO_OK;
+}
+
+tNodoArbol** mayor_nodo_arbol( tArbolBinBusq* pa)
+{
+    while(*pa && (*pa)->der)
+        pa = &(*pa)->der;
+
+    return pa;
+}
+
+tNodoArbol** menor_nodo_arbol( tArbolBinBusq* pa)
+{
+    while(*pa && (*pa)->izq)
+        pa = &(*pa)->izq;
+
+    return pa;
+}
+
+unsigned alturaArbolBin(const tArbolBinBusq *p)
+{
+    int hi, hd;
+
+    if(!*p)
+        return 0;
+
+    hi = alturaArbolBin(&(*p)->izq);
+    hd = alturaArbolBin(&(*p)->der);
+
+    return hi > hd ? hi + 1 : hd + 1;
+}
+
+int eliminarRaizArbolBinBusq(tArbolBinBusq *p)
+{
+    tNodoArbol** remp, *elim;
+
+    if(!*p)
+        return SIN_INICIALIZAR;
+
+    free((*p)->info);
+
+    if(!(*p)->izq && !(*p)->der)
     {
-        if(*c1 > *c2)
-            return 1;
-
-        if(*c1 < *c2)
-            return -1;
-
-        c1++;
-        c2++;
+        free(*p);
+        *p = NULL;
+        return TODO_OK;
     }
-    if(*c1)
-        return 1;
-    if(*c2)
-        return -1;
 
-    return 0;
+    remp =  alturaArbolBin(&(*p)->izq) > alturaArbolBin(&(*p)->der) ?
+            mayor_nodo_arbol(&(*p)->izq) :
+            menor_nodo_arbol(&(*p)->der);
+
+    elim = *remp;
+
+    (*p)->info = elim->info;
+    (*p)->tamInfo = elim->tamInfo;
+
+    *remp = elim->izq ? elim->izq : elim->der;
+
+    free(elim);
+
+    return TODO_OK;
 }
 
 
-char* _mstrstr(const char *s1, const char *s2)
+void eliminarElemNoClaveArbol(tArbolBinBusq *p, void *d,
+                             int (*cmp)(const void *, const void *))
 {
-    if (*s2 == '\0')
-        return (char*)s1; // Si s2 est� vac�a, devuelve s1
+    if(!(p = buscar_nodo_no_clave(p, d, cmp)))
+        return;
 
-    while (*s1 != '\0')
+    memcpy(d, (*p)->info, (*p)->tamInfo);
+
+    eliminarRaizArbolBinBusq(p);
+}
+
+//**************************************************************************************************************
+
+void grabar_archivo(void* elem, unsigned n, void* params)
+{
+    FILE* pf = (FILE*)params;
+    tRegInd* idx = (tRegInd*)elem;
+
+    fwrite(idx, sizeof(tRegInd), 1, pf);
+}
+
+void recorrerEnOrdenSimpleArbolBinBusq(const tArbolBinBusq *p, void *params,
+                                       void (*accion)(void *, unsigned, void *))
+{
+    if(!*p)
+        return;
+
+    recorrerEnOrdenSimpleArbolBinBusq(&(*p)->izq, params, grabar_archivo);
+    accion((*p)->info, 0, params);
+    recorrerEnOrdenSimpleArbolBinBusq(&(*p)->der, params, grabar_archivo);
+}
+
+int grabarEnArchivoOrdenadoArbolBin(tArbolBinBusq *p, const char * path)
+{
+    FILE* pf = fopen(path , "wb");
+
+    if(!pf)
     {
-        const char *p1 = s1;
-        const char *p2 = s2;
-
-        while (*p1 != '\0' && *p2 != '\0' && *p1 == *p2)
-        {
-            p1++;
-            p2++;
-        }
-
-        if (*p2 == '\0')
-            return (char*)s1; // Se encontr� la subcadena, devuelve la ubicaci�n en s1
-
-        s1++; // Avanza al siguiente car�cter en s1
+        printf("\nERROR AL GRABAR EL ARCHIVO %s\n", path);
+        return ERROR_ARCHIVO;
     }
 
-    return NULL; // No se encontr� la subcadena
+    if(!*p)
+        return SIN_INICIALIZAR;
+
+    recorrerEnOrdenSimpleArbolBinBusq(p, pf, grabar_archivo);
+
+    return TODO_OK;
+}
+
+//**************************************************************************************************************
+
+void podar_arbol(tArbolBinBusq *pa)
+{
+    if(!*pa)
+        return;
+
+    if(!(*pa)->der && !(*pa)->izq)
+    {
+        free((*pa)->info);
+        free(*pa);
+        *pa = NULL;
+        return;
+    }
+
+    podar_arbol(&(*pa)->izq);
+    podar_arbol(&(*pa)->der);
+}
+
+void vaciarArbolBin(tArbolBinBusq *p)
+{
+    while(*p)
+        podar_arbol(p);
+}
+
+
+int es_arbol_vacio(tArbolBinBusq *p)
+{
+    return *p == NULL;
 }
 
 
@@ -2133,4 +2017,3 @@ void vaciarPila(Pila *pp)
     }
 }
 /// Fin pila
-
